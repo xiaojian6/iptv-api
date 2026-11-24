@@ -255,6 +255,9 @@ jobs:
               "$pages_link"
           fi
 
+          # 忽略 0 字节的空文件，避免 GitHub Release 上传失败
+          find release-assets -maxdepth 1 -type f -empty -delete
+          
           mapfile -d '' local_assets < <(find release-assets -maxdepth 1 -type f -print0 | sort -z)
           gh release create "$RELEASE_TAG" "${local_assets[@]}" \
             --repo "$GITHUB_REPOSITORY" \
